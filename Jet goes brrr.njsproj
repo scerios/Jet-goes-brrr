@@ -28,9 +28,30 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="babel.config.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="src\app.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\template.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="webpack.common.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="webpack.dev.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="webpack.prod.js">
+      <SubType>Code</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
