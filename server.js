@@ -1,8 +1,19 @@
 'use strict';
-var http = require('http');
-var port = process.env.PORT || 1337;
+const port = process.env.PORT || 3000;
 
-http.createServer(function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello World\n');
-}).listen(port);
+const express = require('express');
+const path = require('path');
+const app = express();
+
+app.use(express.static('dist'));
+app.use(express.urlencoded({
+    extended: true
+}));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.listen(port, () => {
+    console.log(`Listening on ${port}.`);
+});
