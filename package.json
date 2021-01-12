@@ -1,0 +1,9 @@
+{
+  "name": "jet-goes-brrr",
+  "version": "0.0.0",
+  "description": "Jet goes brrr",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  }
+}
