@@ -71,13 +71,13 @@
     }
 
     .menu-btn {
-        @include buttonStyle($cloudWhite);
+        @include buttonStyle($cloudWhite, $nephritisGreen);
 
         @include buttonHover($nephritisGreen);
     }
 
     .exit-btn {
-        @include buttonStyle($cloudWhite);
+        @include buttonStyle($cloudWhite, $tomatoRed);
         
         @include buttonHover($tomatoRed);
     }
