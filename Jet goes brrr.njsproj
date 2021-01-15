@@ -37,6 +37,8 @@
     <Content Include="src\app.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\scss\main.scss" />
+    <Content Include="src\scss\_config.scss" />
     <Content Include="src\template.html">
       <SubType>Code</SubType>
     </Content>
@@ -52,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
+    <Folder Include="src\assets\" />
+    <Folder Include="src\assets\images\" />
+    <Folder Include="src\scss\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

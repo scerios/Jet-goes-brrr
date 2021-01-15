@@ -1,0 +1,89 @@
+@import 'config';
+
+.splash-screen {
+    @include flexCenter();
+    z-index: 1;
+}
+
+.splash-title {
+    color: $asbestosGrey;
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: 15px;
+    text-transform: uppercase;
+    animation: slideUpward 1.5s forwards;
+    animation-delay: 1s;
+}
+
+
+@keyframes slideUpward {
+    0% {
+        margin-top: 0;
+        color: $asbestosGrey;
+    }
+
+    100% {
+        margin-top: -50%;
+        color: $nephritisGreen;
+    }
+}
+
+.cross-container {
+    display: inline-block;
+    font-size: 28px;
+    transform: translateX(-5px);
+}
+
+.spinning-cross {
+    color: $asbestosGrey;
+    display: inline-block;
+    letter-spacing: 0;
+    animation: spin 1s infinite forwards linear, coloring 3s forwards;
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes coloring {
+    100% {
+        color: $tomatoRed;
+    }
+}
+
+.menu {
+    @include flexCenter();
+    z-index: 2;
+    opacity: 0;
+    animation: fade-in 1.5s forwards;
+    animation-delay: 1.3s;
+
+    .btn-container {
+        padding: 10px;
+    }
+
+    .menu-btn {
+        @include buttonStyle($asbestosGrey);
+
+        @include buttonHover($nephritisGreen);
+    }
+
+    .exit-btn {
+        @include buttonStyle($asbestosGrey);
+        
+        @include buttonHover($tomatoRed);
+    }
+}
+
+@keyframes fade-in {
+    100% {
+        opacity: 1;
+    }
+}
