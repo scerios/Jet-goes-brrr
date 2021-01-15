@@ -38,6 +38,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\scss\main.scss" />
+    <Content Include="src\scss\_background.scss" />
     <Content Include="src\scss\_config.scss" />
     <Content Include="src\template.html">
       <SubType>Code</SubType>

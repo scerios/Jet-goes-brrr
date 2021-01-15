@@ -1,4 +1,5 @@
 @import 'config';
+@import '_background';
 
 .splash-screen {
     @include flexCenter();
@@ -70,13 +71,13 @@
     }
 
     .menu-btn {
-        @include buttonStyle($asbestosGrey);
+        @include buttonStyle($cloudWhite);
 
         @include buttonHover($nephritisGreen);
     }
 
     .exit-btn {
-        @include buttonStyle($asbestosGrey);
+        @include buttonStyle($cloudWhite);
         
         @include buttonHover($tomatoRed);
     }
@@ -84,6 +85,7 @@
 
 @keyframes fade-in {
     100% {
-        opacity: 1;
+        opacity: 0.8;
     }
+    
 }

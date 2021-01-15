@@ -1,0 +1,16 @@
+$howManyStars: 500;
+
+$shadow: ();
+
+@for $i from 1 through $howManyStars {
+    $x: random(1920);
+    $y: random(1000);
+    $shadow: $shadow, ( $x+px $y+px #fff) !global;
+}
+
+.star {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: $shadow;
+}
