@@ -1,16 +1,19 @@
 $howManyStars: 500;
+$howManyAliens: 10;
+$distanceBetween: 50px;
 
-$shadow: ();
+$starShadow: ();
+$meteorShadow: ();
 
 @for $i from 1 through $howManyStars {
     $x: random(1920);
     $y: random(1000);
-    $shadow: $shadow, ( $x+px $y+px #fff) !global;
+    $starShadow: $starShadow, ($x+px $y+px #fff) !global;
 }
 
 .star {
     width: 1px;
     height: 1px;
     background: transparent;
-    box-shadow: $shadow;
+    box-shadow: $starShadow;
 }
