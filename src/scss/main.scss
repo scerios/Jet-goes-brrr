@@ -88,3 +88,7 @@
     }
     
 }
+
+.game {
+    @include flexCenter();
+}

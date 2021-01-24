@@ -28,9 +28,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="babel.config.json">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -40,6 +37,16 @@
     <Content Include="src\app\Game.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\assets\images\enemyJet.png" />
+    <Content Include="src\assets\images\farBackground.png" />
+    <Content Include="src\assets\images\farSun.png" />
+    <Content Include="src\assets\images\frontTrees.png" />
+    <Content Include="src\assets\images\middleBackgroundShadow.png" />
+    <Content Include="src\assets\images\middleBackground.png" />
+    <Content Include="src\assets\images\middleCityShadow.png" />
+    <Content Include="src\assets\images\middleCity.png" />
+    <Content Include="src\assets\images\missile.png" />
+    <Content Include="src\assets\images\playerJet.png" />
     <Content Include="src\scss\main.scss" />
     <Content Include="src\scss\_background.scss" />
     <Content Include="src\scss\_config.scss" />
