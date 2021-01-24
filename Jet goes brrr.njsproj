@@ -34,10 +34,16 @@
     <Content Include="src\app.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\app\Player.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\app\Sprite.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\app\Game.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\app\WorldDetail.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\assets\images\enemyJet.png" />
