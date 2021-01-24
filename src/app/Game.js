@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
+import { WorldDetail } from './WorldDetail.js';
 import { Sprite } from './Sprite.js';
 import { Player } from './Player.js';
-import { WorldDetail } from './WorldDetail.js';
 
 export class Game {
     app;
@@ -16,19 +16,17 @@ export class Game {
 
     isRunning = false;
 
-    constructor(gameplayElements, backgroundImages) {
+    constructor(gameplayElements) {
         this.app = new PIXI.Application({ width: 800, height: 600 });
         this.sprites = {};
-        this.setup(gameplayElements, backgroundImages);
+        this.setup(gameplayElements);
     }
 
-    setup(gameplayElements, backgroundImages) {
+    setup(gameplayElements) {
         this.initKeyCapture();
         this.keyboardCapture();
 
         this.addAssetsToLoader(gameplayElements);
-
-        this.addAssetsToLoader(backgroundImages)
 
         this.addSpritesToLoader();
     }

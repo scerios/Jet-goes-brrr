@@ -18,13 +18,16 @@ const splashScreen = $('.splash-screen');
 const menuContainer = $('.menu');
 const gameContainer = $('.game');
 
-const gameplayElements = [playerJet, enemyJet, missile, explosion];
-const backgroundImages = [frontTrees, middleCity, middleCityShadow, middleBackground, middleBackgroundShadow, farSun, farBackground];
+const gameplayElements = [
+    playerJet, enemyJet, missile, explosion,
+    frontTrees, middleCity, middleCityShadow, middleBackground, middleBackgroundShadow, farSun, farBackground
+];
+
 let game;
 
 gameButtons.on('click', () => {
     if (game == undefined) {
-        game = new Game(gameplayElements, backgroundImages);
+        game = new Game(gameplayElements);
     } else {
         game.startGame();
     }
