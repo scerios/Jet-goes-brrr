@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { Sprite } from './Sprite.js';
 
 export class Game {
     app;
@@ -31,19 +32,31 @@ export class Game {
         const halfPositionOnY = this.app.renderer.height / 2 - modelSize / 2;
 
         this.app.loader.load((loader, resources) => {
-            this.sprites.playerJet = new PIXI.Sprite(resources.playerJet.texture);
-            this.sprites.playerJet.width = modelSize;
-            this.sprites.playerJet.height = modelSize;
-            this.sprites.playerJet.x = 0;
-            this.sprites.playerJet.y = halfPositionOnY;
-            this.app.stage.addChild(this.sprites.playerJet);
+            let playerJet = new Sprite({
+                texture: resources.playerJet.texture,
+                width: modelSize,
+                height: modelSize,
+                x: 0,
+                y: halfPositionOnY,
+                moveSpeed: 5,
+                vx: 0,
+                vy: 0
+            });
 
-            this.sprites.enemyJet = new PIXI.Sprite(resources.enemyJet.texture);
-            this.sprites.enemyJet.width = modelSize;
-            this.sprites.enemyJet.height = modelSize;
-            this.sprites.enemyJet.x = this.app.renderer.width - modelSize;
-            this.sprites.enemyJet.y = halfPositionOnY;
-            this.app.stage.addChild(this.sprites.enemyJet);
+            this.app.stage.addChild(playerJet);
+
+            let enemyJet = new Sprite({
+                texture: resources.enemyJet.texture,
+                width: modelSize,
+                height: modelSize,
+                x: this.app.renderer.width - modelSize,
+                y: halfPositionOnY,
+                moveSpeed: 5,
+                vx: 0,
+                vy: 0
+            });
+
+            this.app.stage.addChild(enemyJet);
         });
     }
 }
