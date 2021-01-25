@@ -1,7 +1,8 @@
-import * as PIXI from 'pixi.js';
+import { Sprite } from '@pixi/sprite';
 
-export class Sprite extends PIXI.Sprite {
+export class GameElement extends Sprite {
     moveSpeed;
+    randomDirection;
     isGoingUp = false;
     isGoingDown = false;
     isGoingLeft = false;
@@ -103,5 +104,36 @@ export class Sprite extends PIXI.Sprite {
         if (this.isGoingDown && !this.checkIfIsNextToBottomBorder()) {
             this.y += this.vy;
         }
+    }
+
+    randomMovement() {
+        let direction;
+
+        let randomDirection = setInterval(() => {
+            direction = Math.floor(Math.random() * 3);
+
+            switch (direction) {
+                case 0:
+                    this.vy = 0;
+                    this.isGoingUp = false;
+                    this.isGoingDown = false;
+                    break;
+
+                case 1:
+                    this.vy = this.moveSpeed;
+                    this.isGoingUp = false;
+                    this.isGoingDown = true;
+                    break;
+
+                case 2:
+                    this.vy = -this.moveSpeed;
+                    this.isGoingUp = true;
+                    this.isGoingDown = false;
+                    break;
+            }
+
+        }, 250);
+
+        this.randomDirection = randomDirection;
     }
 }

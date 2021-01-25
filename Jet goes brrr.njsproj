@@ -37,7 +37,7 @@
     <Content Include="src\app\Player.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\app\Sprite.js">
+    <Content Include="src\app\GameElement.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\app\Game.js">

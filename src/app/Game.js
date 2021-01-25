@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { WorldDetail } from './WorldDetail.js';
-import { Sprite } from './Sprite.js';
+import { GameElement } from './GameElement.js';
 import { Player } from './Player.js';
 
 export class Game {
@@ -8,6 +8,11 @@ export class Game {
     ticker;
     sprites;
     tiles;
+
+    enemies = [];
+    missiles = [];
+
+    spawnEnemies;
 
     up;
     down;
@@ -32,6 +37,7 @@ export class Game {
 
         this.addAssetsToLoader(gameplayElements);
         this.createGameElements();
+        this.addGameElementsToStage();
 
         this.initTicker();
         this.setTickerEvents();
@@ -179,28 +185,14 @@ export class Game {
     createGameElements() {
         this.app.loader.load((loader, resources) => {
             this.tiles.farBackground = this.createBackgroundTile(resources.farBackground.texture);
-            this.app.stage.addChild(this.tiles.farBackground);
-
             this.tiles.farSun = this.createBackgroundTile(resources.farSun.texture);
-            this.app.stage.addChild(this.tiles.farSun);
-
             this.tiles.middleBackgroundShadow = this.createBackgroundTile(resources.middleBackgroundShadow.texture);
-            this.app.stage.addChild(this.tiles.middleBackgroundShadow);
-
             this.tiles.middleBackground = this.createBackgroundTile(resources.middleBackground.texture);
-            this.app.stage.addChild(this.tiles.middleBackground);
-
             this.tiles.middleCityShadow = this.createBackgroundTile(resources.middleCityShadow.texture);
-            this.app.stage.addChild(this.tiles.middleCityShadow);
-
             this.tiles.middleCity = this.createBackgroundTile(resources.middleCity.texture);
-            this.app.stage.addChild(this.tiles.middleCity);
-
             this.tiles.frontTrees = this.createBackgroundTile(resources.frontTrees.texture);
-            this.app.stage.addChild(this.tiles.frontTrees);
 
             this.sprites.playerJet = this.createPlayer(resources.playerJet.texture);
-            this.app.stage.addChild(this.sprites.playerJet);
         });
     }
 
@@ -211,7 +203,7 @@ export class Game {
             height: WorldDetail.getModelSize,
             x: 0,
             y: WorldDetail.getHalfPositionOnY,
-            moveSpeed: 5,
+            moveSpeed: WorldDetail.getMoveSpeed,
             vx: 0,
             vy: 0,
             up: this.up,
@@ -226,6 +218,19 @@ export class Game {
         tile.position.set(0, 0);
 
         return tile;
+    }
+
+    addGameElementsToStage() {
+        this.app.loader.load((loader, resources) => {
+            this.app.stage.addChild(this.tiles.farBackground);
+            this.app.stage.addChild(this.tiles.farSun);
+            this.app.stage.addChild(this.tiles.middleBackgroundShadow);
+            this.app.stage.addChild(this.tiles.middleBackground);
+            this.app.stage.addChild(this.tiles.middleCityShadow);
+            this.app.stage.addChild(this.tiles.middleCity);
+            this.app.stage.addChild(this.tiles.frontTrees);
+            this.app.stage.addChild(this.sprites.playerJet);
+        });
     }
 
     scrollBackground() {
@@ -247,10 +252,37 @@ export class Game {
             this.scrollBackground();
 
             this.sprites.playerJet.limitMovement();
+
+            if (this.enemies.length > 0) {
+                for (let enemy of this.enemies) {
+                    enemy.limitMovement();
+                    enemy.x -= enemy.moveSpeed;
+                }
+            }
         });
     }
 
     startGame() {
         this.ticker.start();
+
+        this.spawnEnemies = setInterval(() => {
+            this.app.loader.load((loader, resources) => {
+                let enemyJet = new GameElement({
+                    texture: resources.enemyJet.texture,
+                    width: WorldDetail.getModelSize,
+                    height: WorldDetail.getModelSize,
+                    x: WorldDetail.getGameWidth + WorldDetail.getModelSize,
+                    y: (WorldDetail.getGameHeight - WorldDetail.getModelSize) - Math.floor(Math.random() * 501),
+                    moveSpeed: WorldDetail.getMoveSpeed,
+                    vx: 0,
+                    vy: 0
+                });
+
+                enemyJet.randomMovement();
+
+                this.enemies.push(enemyJet);
+                this.app.stage.addChild(enemyJet);
+            });
+        }, 2000);
     }
 }

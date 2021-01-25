@@ -1,6 +1,6 @@
-import { Sprite } from './Sprite.js';
+import { GameElement } from './GameElement.js';
 
-export class Player extends Sprite {
+export class Player extends GameElement {
     up;
     down;
     left;
