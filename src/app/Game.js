@@ -15,6 +15,7 @@ export class Game {
     right;
     space;
 
+    backgroundPositionX = 0;
     isRunning = false;
 
     constructor(gameplayElements) {
@@ -227,6 +228,15 @@ export class Game {
         return tile;
     }
 
+    scrollBackground() {
+        this.backgroundPositionX = this.backgroundPositionX - WorldDetail.getScrollSpeed;
+        this.tiles.frontTrees.tilePosition.x = this.backgroundPositionX;
+        this.tiles.middleCity.tilePosition.x = this.backgroundPositionX / 2;
+        this.tiles.middleCityShadow.tilePosition.x = this.backgroundPositionX / 2 + 0.25;
+        this.tiles.middleBackground.tilePosition.x = this.backgroundPositionX / 3;
+        this.tiles.middleBackgroundShadow.tilePosition.x = this.backgroundPositionX / 3 + 0.25;
+    }
+
     initTicker() {
         this.ticker = PIXI.Ticker.shared;
         this.ticker.autoStart = false;
@@ -234,6 +244,8 @@ export class Game {
 
     setTickerEvents() {
         this.ticker.add(() => {
+            this.scrollBackground();
+
             this.sprites.playerJet.limitMovement();
         });
     }
