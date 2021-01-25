@@ -5,23 +5,23 @@ const gameHeight = 600;
 const halfPositionOnY = gameHeight / 2 - modelSize / 2;
 
 export class WorldDetail {
-    static get modelSize() {
+    static get getModelSize() {
         return modelSize;
     }
 
-    static get moveSpeed() {
+    static get getMoveSpeed() {
         return moveSpeed;
     }
 
-    static get gameWidth() {
+    static get getGameWidth() {
         return gameWidth;
     }
 
-    static get gameHeight() {
+    static get getGameHeight() {
         return gameHeight;
     }
 
-    static get halfPositionOnY() {
+    static get getHalfPositionOnY() {
         return halfPositionOnY;
     }
 }

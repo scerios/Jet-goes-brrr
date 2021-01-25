@@ -25,16 +25,21 @@ const gameplayElements = [
 
 let game;
 
+$(document).ready(() => {
+    game = new Game(gameplayElements);
+    gameContainer.fadeOut();
+});
+
 gameButtons.on('click', () => {
-    if (game == undefined) {
-        game = new Game(gameplayElements);
-    } else {
-        game.startGame();
-    }
-
-    gameContainer.append(game.app.view);
-
     splashScreen.fadeOut();
     menuContainer.fadeOut();
-    gameContainer.fadeIn();
+
+    setTimeout(() => {
+        gameContainer.append(game.app.view);
+        gameContainer.fadeIn();
+    }, 500);
+
+    setTimeout(() => {
+        game.startGame();
+    }, 1500);
 });

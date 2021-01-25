@@ -5,7 +5,7 @@ import { Player } from './Player.js';
 
 export class Game {
     app;
-
+    ticker;
     sprites;
 
     up;
@@ -17,8 +17,9 @@ export class Game {
     isRunning = false;
 
     constructor(gameplayElements) {
-        this.app = new PIXI.Application({ width: 800, height: 600 });
+        this.app = new PIXI.Application({ width: WorldDetail.getGameWidth, height: WorldDetail.getGameHeight });
         this.sprites = {};
+
         this.setup(gameplayElements);
     }
 
@@ -27,8 +28,10 @@ export class Game {
         this.keyboardCapture();
 
         this.addAssetsToLoader(gameplayElements);
-
         this.addSpritesToLoader();
+
+        this.initTicker();
+        this.setTickerEvents();
     }
 
     initKeyCapture() {
@@ -174,20 +177,16 @@ export class Game {
         this.app.loader.load((loader, resources) => {
             this.sprites.playerJet = this.createPlayer(resources["playerJet"].texture);
             this.app.stage.addChild(this.sprites.playerJet);
-
-            this.app.ticker.add(() => {
-                this.sprites.playerJet.limitMovement();
-            });
         });
     }
 
     createPlayer(texture) {
         return new Player({
             texture: texture,
-            width: WorldDetail.modelSize,
-            height: WorldDetail.modelSize,
+            width: WorldDetail.getModelSize,
+            height: WorldDetail.getModelSize,
             x: 0,
-            y: WorldDetail.halfPositionOnY,
+            y: WorldDetail.getHalfPositionOnY,
             moveSpeed: 5,
             vx: 0,
             vy: 0,
@@ -198,4 +197,18 @@ export class Game {
         });
     }
 
+    initTicker() {
+        this.ticker = PIXI.Ticker.shared;
+        this.ticker.autoStart = false;
+    }
+
+    setTickerEvents() {
+        this.ticker.add(() => {
+            this.sprites.playerJet.limitMovement();
+        });
+    }
+
+    startGame() {
+        this.ticker.start();
+    }
 }
