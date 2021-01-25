@@ -7,6 +7,7 @@ export class Game {
     app;
     ticker;
     sprites;
+    tiles;
 
     up;
     down;
@@ -19,6 +20,7 @@ export class Game {
     constructor(gameplayElements) {
         this.app = new PIXI.Application({ width: WorldDetail.getGameWidth, height: WorldDetail.getGameHeight });
         this.sprites = {};
+        this.tiles = {};
 
         this.setup(gameplayElements);
     }
@@ -28,7 +30,7 @@ export class Game {
         this.keyboardCapture();
 
         this.addAssetsToLoader(gameplayElements);
-        this.addSpritesToLoader();
+        this.createGameElements();
 
         this.initTicker();
         this.setTickerEvents();
@@ -173,9 +175,30 @@ export class Game {
         }
     }
 
-    addSpritesToLoader() {
+    createGameElements() {
         this.app.loader.load((loader, resources) => {
-            this.sprites.playerJet = this.createPlayer(resources["playerJet"].texture);
+            this.tiles.farBackground = this.createBackgroundTile(resources.farBackground.texture);
+            this.app.stage.addChild(this.tiles.farBackground);
+
+            this.tiles.farSun = this.createBackgroundTile(resources.farSun.texture);
+            this.app.stage.addChild(this.tiles.farSun);
+
+            this.tiles.middleBackgroundShadow = this.createBackgroundTile(resources.middleBackgroundShadow.texture);
+            this.app.stage.addChild(this.tiles.middleBackgroundShadow);
+
+            this.tiles.middleBackground = this.createBackgroundTile(resources.middleBackground.texture);
+            this.app.stage.addChild(this.tiles.middleBackground);
+
+            this.tiles.middleCityShadow = this.createBackgroundTile(resources.middleCityShadow.texture);
+            this.app.stage.addChild(this.tiles.middleCityShadow);
+
+            this.tiles.middleCity = this.createBackgroundTile(resources.middleCity.texture);
+            this.app.stage.addChild(this.tiles.middleCity);
+
+            this.tiles.frontTrees = this.createBackgroundTile(resources.frontTrees.texture);
+            this.app.stage.addChild(this.tiles.frontTrees);
+
+            this.sprites.playerJet = this.createPlayer(resources.playerJet.texture);
             this.app.stage.addChild(this.sprites.playerJet);
         });
     }
@@ -195,6 +218,13 @@ export class Game {
             left: this.left,
             right: this.right
         });
+    }
+
+    createBackgroundTile(texture) {
+        let tile = new PIXI.TilingSprite(texture, WorldDetail.getGameWidth, WorldDetail.getGameHeight);
+        tile.position.set(0, 0);
+
+        return tile;
     }
 
     initTicker() {
