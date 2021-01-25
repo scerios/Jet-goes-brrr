@@ -7,7 +7,6 @@ export class GameElement extends Sprite {
     isGoingDown = false;
     isGoingLeft = false;
     isGoingRight = false;
-    isAlive = true;
 
     constructor(details) {
         super(details.texture);
@@ -65,35 +64,19 @@ export class GameElement extends Sprite {
     }
 
     checkIfIsNextToTopBorder() {
-        if (this.isAlive) {
-            return this.y - this.vy - this.moveSpeed < 0;
-        } else {
-            return false;
-        }
+        return this.y - this.vy - this.moveSpeed < 5;
     }
 
     checkIfIsNextToBottomBorder() {
-        if (this.isAlive) {
-            return this.y + 100 + this.vy > 600;
-        } else {
-            return false;
-        }
+        return this.y + 100 + this.vy > 600;
     }
 
     checkIfIsNextToLeftBorder() {
-        if (this.isAlive) {
-            return this.x - this.vx - this.moveSpeed < 0;
-        } else {
-            return false;
-        }
+        return this.x - this.vx - this.moveSpeed < 5;
     }
 
     checkIfIsNextToRightBorder() {
-        if (this.isAlive) {
-            return this.x + 100 + this.vx > 800;
-        } else {
-            return false;
-        }
+        return this.x + 100 + this.vx > 800;
     }
 
     limitMovement() {

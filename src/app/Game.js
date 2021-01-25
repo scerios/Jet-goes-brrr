@@ -5,6 +5,7 @@ import { Player } from './Player.js';
 
 export class Game {
     app;
+    resources;
     ticker;
     sprites;
     tiles;
@@ -169,8 +170,9 @@ export class Game {
         };
 
         this.space.press = () => {
-            let missile = this.sprites.playerJet.shootRocket();
-            missiles.push(missile);
+            let missile = this.sprites.playerJet.shootMissile(this.resources.missile.texture);
+
+            this.missiles.push(missile);
             this.app.stage.addChild(missile);
         };
     }
@@ -180,6 +182,8 @@ export class Game {
             let name = asset.match(/(?<=\/)(.*?)(?=\.)/g)[0];
             this.app.loader.add(name, asset);
         }
+
+        this.resources = this.app.loader.resources;
     }
 
     createGameElements() {
@@ -253,36 +257,55 @@ export class Game {
 
             this.sprites.playerJet.limitMovement();
 
-            if (this.enemies.length > 0) {
-                for (let enemy of this.enemies) {
-                    enemy.limitMovement();
-                    enemy.x -= enemy.moveSpeed;
+            this.moveEnemies();
+
+            this.moveRockets();
+        });
+    }
+
+    moveEnemies() {
+        if (this.enemies.length > 0) {
+            for (let enemy of this.enemies) {
+                enemy.limitMovement();
+                enemy.x -= enemy.moveSpeed;
+            }
+        }
+    }
+
+    moveRockets() {
+        if (this.missiles.length > 0) {
+            for (let missile of this.missiles) {
+                missile.x += missile.moveSpeed;
+
+                if (missile.x > WorldDetail.getGameWidth) {
+                    this.app.loader.load((loader, resources) => {
+                        this.app.stage.removeChild(missile);
+                        this.missiles.splice(this.missiles.indexOf(missile), 1);
+                    });
                 }
             }
-        });
+        }
     }
 
     startGame() {
         this.ticker.start();
 
         this.spawnEnemies = setInterval(() => {
-            this.app.loader.load((loader, resources) => {
-                let enemyJet = new GameElement({
-                    texture: resources.enemyJet.texture,
-                    width: WorldDetail.getModelSize,
-                    height: WorldDetail.getModelSize,
-                    x: WorldDetail.getGameWidth + WorldDetail.getModelSize,
-                    y: (WorldDetail.getGameHeight - WorldDetail.getModelSize) - Math.floor(Math.random() * 501),
-                    moveSpeed: WorldDetail.getMoveSpeed,
-                    vx: 0,
-                    vy: 0
-                });
-
-                enemyJet.randomMovement();
-
-                this.enemies.push(enemyJet);
-                this.app.stage.addChild(enemyJet);
+            let enemyJet = new GameElement({
+                texture: this.resources.enemyJet.texture,
+                width: WorldDetail.getModelSize,
+                height: WorldDetail.getModelSize,
+                x: WorldDetail.getGameWidth + WorldDetail.getModelSize,
+                y: (WorldDetail.getGameHeight - WorldDetail.getModelSize) - Math.floor(Math.random() * 501),
+                moveSpeed: WorldDetail.getMoveSpeed,
+                vx: 0,
+                vy: 0
             });
+
+            enemyJet.randomMovement();
+
+            this.enemies.push(enemyJet);
+            this.app.stage.addChild(enemyJet);
         }, 2000);
     }
 }

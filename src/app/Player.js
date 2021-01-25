@@ -1,4 +1,5 @@
 import { GameElement } from './GameElement.js';
+import { WorldDetail } from './WorldDetail.js';
 
 export class Player extends GameElement {
     up;
@@ -94,5 +95,18 @@ export class Player extends GameElement {
         if (this.isGoingRight && !this.checkIfIsNextToRightBorder()) {
             this.x += this.vx;
         }
+    }
+
+    shootMissile(texture) {
+        return new GameElement({
+            texture: texture,
+            width: WorldDetail.getModelSize,
+            height: WorldDetail.getModelSize / 4,
+            x: this.x + 25,
+            y: (this.y + WorldDetail.getModelSize / 2) - WorldDetail.getModelSize / 8,
+            moveSpeed: 10,
+            vx: 10,
+            vy: 0
+        });
     }
 }
