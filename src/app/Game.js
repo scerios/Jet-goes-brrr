@@ -22,7 +22,6 @@ export class Game {
     space;
 
     backgroundPositionX = 0;
-    isRunning = false;
 
     constructor(gameplayElements) {
         this.app = new PIXI.Application({ width: WorldDetail.getGameWidth, height: WorldDetail.getGameHeight });
@@ -283,8 +282,8 @@ export class Game {
                 enemy.x -= enemy.moveSpeed;
 
                 if (enemy.x < -enemy.width) {
-                    this.app.stage.removeChild(enemy);
-                    this.enemies.splice(this.enemies.indexOf(enemy), 1);
+                    this.removeEnemy(enemy);
+                    continue;
                 }
             }
         }
@@ -296,13 +295,55 @@ export class Game {
                 missile.x += missile.moveSpeed;
 
                 if (missile.x > WorldDetail.getGameWidth) {
-                    this.app.loader.load((loader, resources) => {
-                        this.app.stage.removeChild(missile);
-                        this.missiles.splice(this.missiles.indexOf(missile), 1);
-                    });
+                    this.removeMissile(missile);
+
+                    continue;
+                }
+
+                if (this.enemies.length > 0) {
+                    for (let enemy of this.enemies) {
+                        if (this.checkForCollision(missile, enemy)) {
+                            this.removeEnemy(enemy);
+                            this.removeMissile(missile);
+
+                            break;
+                        }
+                    }
                 }
             }
         }
+    }
+
+    checkForCollision(elementA, elementB) {
+        let isHit = false;
+
+        if (elementA != undefined && elementB != undefined) {
+
+            if (elementA.x + elementA.width >= elementB.x && elementA.x <= elementB.x + elementB.width) {
+
+                if (elementA.y == elementB.y) {
+                    isHit = true;
+
+                } else if (elementA.y < elementB.y && elementA.y + elementA.height >= elementB.y) {
+                    isHit = true;
+
+                } else if (elementB.y < elementA.y && elementB.y + elementB.height >= elementA.y) {
+                    isHit = true;
+                }
+            }
+        }
+
+        return isHit;
+    };
+
+    removeMissile(missile) {
+        this.app.stage.removeChild(missile);
+        this.missiles.splice(this.missiles.indexOf(missile), 1);
+    }
+
+    removeEnemy(enemy) {
+        this.app.stage.removeChild(enemy);
+        this.enemies.splice(this.enemies.indexOf(enemy), 1);
     }
 
     startGame() {
