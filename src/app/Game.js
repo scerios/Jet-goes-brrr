@@ -174,6 +174,19 @@ export class Game {
 
             this.missiles.push(missile);
             this.app.stage.addChild(missile);
+
+            let explosion = new GameElement({
+                texture: this.resources.explosion.texture,
+                width: WorldDetail.getModelSize,
+                height: WorldDetail.getModelSize,
+                x: 100,
+                y: 100,
+                moveSpeed: 0,
+                vx: 0,
+                vy: 0
+            });
+
+            this.app.stage.addChild(explosion);
         };
     }
 
@@ -268,6 +281,11 @@ export class Game {
             for (let enemy of this.enemies) {
                 enemy.limitMovement();
                 enemy.x -= enemy.moveSpeed;
+
+                if (enemy.x < -enemy.width) {
+                    this.app.stage.removeChild(enemy);
+                    this.enemies.splice(this.enemies.indexOf(enemy), 1);
+                }
             }
         }
     }
