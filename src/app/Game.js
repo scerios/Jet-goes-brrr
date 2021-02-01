@@ -173,19 +173,6 @@ export class Game {
 
             this.missiles.push(missile);
             this.app.stage.addChild(missile);
-
-            let explosion = new GameElement({
-                texture: this.resources.explosion.texture,
-                width: WorldDetail.getModelSize,
-                height: WorldDetail.getModelSize,
-                x: 100,
-                y: 100,
-                moveSpeed: 0,
-                vx: 0,
-                vy: 0
-            });
-
-            this.app.stage.addChild(explosion);
         };
     }
 
@@ -195,7 +182,11 @@ export class Game {
             this.app.loader.add(name, asset);
         }
 
+        this.app.loader.add('./images/explosion.json');
+
         this.resources = this.app.loader.resources;
+        let sheet = this.resources['./images/explosion.json'].spritesheet;
+        console.log(sheet);
     }
 
     createGameElements() {
@@ -285,6 +276,10 @@ export class Game {
                     this.removeEnemy(enemy);
                     continue;
                 }
+
+                if (this.checkForCollision(this.sprites.playerJet, enemy)) {
+                    this.stopGame();
+                }
             }
         }
     }
@@ -366,5 +361,11 @@ export class Game {
             this.enemies.push(enemyJet);
             this.app.stage.addChild(enemyJet);
         }, 2000);
+    }
+
+    stopGame() {
+        this.ticker.stop();
+
+        clearInterval(this.spawnEnemies);
     }
 }

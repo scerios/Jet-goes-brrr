@@ -1,10 +1,17 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 module.exports = {
     entry: './src/app.js',
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/template.html'
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: path.resolve(__dirname, 'src/assets/images', 'explosion.json'), to: 'images' }
+            ]
         })
     ],
     module: {

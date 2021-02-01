@@ -4,7 +4,6 @@ import { Game } from './app/Game';
 import playerJet from './assets/images/playerJet.png';
 import enemyJet from './assets/images/enemyJet.png';
 import missile from './assets/images/missile.png';
-import explosion from './assets/images/explosion.gif';
 import frontTrees from './assets/images/frontTrees.png';
 import middleCity from './assets/images/middleCity.png';
 import middleCityShadow from './assets/images/middleCityShadow.png';
@@ -18,12 +17,12 @@ const splashScreen = $('.splash-screen');
 const menuContainer = $('.menu');
 const gameContainer = $('.game');
 
+let game;
+
 const gameplayElements = [
-    playerJet, enemyJet, missile, explosion,
+    playerJet, enemyJet, missile,
     frontTrees, middleCity, middleCityShadow, middleBackground, middleBackgroundShadow, farSun, farBackground
 ];
-
-let game;
 
 $(document).ready(() => {
     game = new Game(gameplayElements);

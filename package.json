@@ -12,11 +12,15 @@
     "test": "jest --verbose"
   },
   "babel": {
-    "presets": [ "@babel/preset-env" ],
+    "presets": [
+      "@babel/preset-env"
+    ],
     "plugins": [
       [
         "@babel/plugin-proposal-class-properties",
-        { "loose": true }
+        {
+          "loose": true
+        }
       ]
     ]
   },
@@ -34,6 +38,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "babel-loader": "^8.2.2",
+    "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "file-loader": "^6.2.0",
