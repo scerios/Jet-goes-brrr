@@ -189,11 +189,28 @@ export class Game {
         this.app.loader.onComplete.add(() => {
             this.resources = this.app.loader.resources;
 
-            for (let i = 0; i < 48; i++) {
-                let texture = PIXI.Texture.from(`exp_${i + 1}.png`);
-                this.explosionTextures.push(texture);
-            }
+            this.loadExplosionTextures();
         });
+    }
+
+    addGameElementsToStage() {
+        this.app.loader.load((loader, resources) => {
+            this.app.stage.addChild(this.tiles.farBackground);
+            this.app.stage.addChild(this.tiles.farSun);
+            this.app.stage.addChild(this.tiles.middleBackgroundShadow);
+            this.app.stage.addChild(this.tiles.middleBackground);
+            this.app.stage.addChild(this.tiles.middleCityShadow);
+            this.app.stage.addChild(this.tiles.middleCity);
+            this.app.stage.addChild(this.tiles.frontTrees);
+            this.app.stage.addChild(this.sprites.playerJet);
+        });
+    }
+
+    loadExplosionTextures() {
+        for (let i = 0; i < 48; i++) {
+            let texture = PIXI.Texture.from(`exp_${i + 1}.png`);
+            this.explosionTextures.push(texture);
+        }
     }
 
     createGameElements() {
@@ -206,13 +223,13 @@ export class Game {
             this.tiles.middleCity = this.createBackgroundTile(resources.middleCity.texture);
             this.tiles.frontTrees = this.createBackgroundTile(resources.frontTrees.texture);
 
-            this.sprites.playerJet = this.createPlayer(resources.playerJet.texture);
+            this.sprites.playerJet = this.createPlayer();
         });
     }
 
-    createPlayer(texture) {
+    createPlayer() {
         return new Player({
-            texture: texture,
+            texture: this.resources.playerJet.texture,
             width: WorldDetail.getModelSize,
             height: WorldDetail.getModelSize,
             x: 0,
@@ -227,24 +244,24 @@ export class Game {
         });
     }
 
+    createEnemy() {
+        return new GameElement({
+            texture: this.resources.enemyJet.texture,
+            width: WorldDetail.getModelSize,
+            height: WorldDetail.getModelSize,
+            x: WorldDetail.getGameWidth + WorldDetail.getModelSize,
+            y: (WorldDetail.getGameHeight - WorldDetail.getModelSize) - Math.floor(Math.random() * 501),
+            moveSpeed: WorldDetail.getMoveSpeed,
+            vx: 0,
+            vy: 0
+        });
+    }
+
     createBackgroundTile(texture) {
         let tile = new PIXI.TilingSprite(texture, WorldDetail.getGameWidth, WorldDetail.getGameHeight);
         tile.position.set(0, 0);
 
         return tile;
-    }
-
-    addGameElementsToStage() {
-        this.app.loader.load((loader, resources) => {
-            this.app.stage.addChild(this.tiles.farBackground);
-            this.app.stage.addChild(this.tiles.farSun);
-            this.app.stage.addChild(this.tiles.middleBackgroundShadow);
-            this.app.stage.addChild(this.tiles.middleBackground);
-            this.app.stage.addChild(this.tiles.middleCityShadow);
-            this.app.stage.addChild(this.tiles.middleCity);
-            this.app.stage.addChild(this.tiles.frontTrees);
-            this.app.stage.addChild(this.sprites.playerJet);
-        });
     }
 
     scrollBackground() {
@@ -376,16 +393,7 @@ export class Game {
         this.ticker.start();
 
         this.spawnEnemies = setInterval(() => {
-            let enemyJet = new GameElement({
-                texture: this.resources.enemyJet.texture,
-                width: WorldDetail.getModelSize,
-                height: WorldDetail.getModelSize,
-                x: WorldDetail.getGameWidth + WorldDetail.getModelSize,
-                y: (WorldDetail.getGameHeight - WorldDetail.getModelSize) - Math.floor(Math.random() * 501),
-                moveSpeed: WorldDetail.getMoveSpeed,
-                vx: 0,
-                vy: 0
-            });
+            let enemyJet = this.createEnemy();
 
             enemyJet.randomMovement();
 
@@ -396,7 +404,5 @@ export class Game {
 
     stopGame() {
         this.ticker.stop();
-
-        clearInterval(this.spawnEnemies);
     }
 }
