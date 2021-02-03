@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { WorldDetail } from './WorldDetail.js';
 import { GameElement } from './GameElement.js';
 import { Player } from './Player.js';
+import { Explosion } from './Explosion.js';
 
 export class Game {
     app;
@@ -10,6 +11,7 @@ export class Game {
     sprites;
     tiles;
 
+    explosionTextures = []
     enemies = [];
     missiles = [];
 
@@ -184,9 +186,14 @@ export class Game {
 
         this.app.loader.add('./images/explosion.json');
 
-        this.resources = this.app.loader.resources;
-        let sheet = this.resources['./images/explosion.json'].spritesheet;
-        console.log(sheet);
+        this.app.loader.onComplete.add(() => {
+            this.resources = this.app.loader.resources;
+
+            for (let i = 0; i < 48; i++) {
+                let texture = PIXI.Texture.from(`exp_${i + 1}.png`);
+                this.explosionTextures.push(texture);
+            }
+        });
     }
 
     createGameElements() {
@@ -278,7 +285,13 @@ export class Game {
                 }
 
                 if (this.checkForCollision(this.sprites.playerJet, enemy)) {
-                    this.stopGame();
+                    this.explodeEnemy(enemy);
+                    this.explodePlayer();
+                    clearInterval(this.spawnEnemies);
+
+                    setInterval(() => {
+                        this.stopGame();
+                    }, 1000);
                 }
             }
         }
@@ -298,7 +311,7 @@ export class Game {
                 if (this.enemies.length > 0) {
                     for (let enemy of this.enemies) {
                         if (this.checkForCollision(missile, enemy)) {
-                            this.removeEnemy(enemy);
+                            this.explodeEnemy(enemy);
                             this.removeMissile(missile);
 
                             break;
@@ -330,6 +343,24 @@ export class Game {
 
         return isHit;
     };
+
+    explodeEnemy(enemy) {
+        let enemyExplosion = new Explosion(this.explosionTextures, enemy.x, enemy.y);
+        this.app.stage.addChild(enemyExplosion);
+
+        enemyExplosion.play();
+
+        this.removeEnemy(enemy);
+    }
+
+    explodePlayer() {
+        let playerExplosion = new Explosion(this.explosionTextures, this.sprites.playerJet.x, this.sprites.playerJet.y);
+        this.app.stage.addChild(playerExplosion);
+
+        playerExplosion.play();
+
+        this.app.stage.removeChild(this.sprites.playerJet);
+    }
 
     removeMissile(missile) {
         this.app.stage.removeChild(missile);

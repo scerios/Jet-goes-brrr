@@ -11,6 +11,7 @@ import middleBackground from './assets/images/middleBackground.png';
 import middleBackgroundShadow from './assets/images/middleBackgroundShadow.png';
 import farSun from './assets/images/farSun.png';
 import farBackground from './assets/images/farBackground.png';
+import explosion from './assets/images/explosion.png';
 
 const gameButtons = $('.game-btn');
 const splashScreen = $('.splash-screen');
@@ -20,7 +21,7 @@ const gameContainer = $('.game');
 let game;
 
 const gameplayElements = [
-    playerJet, enemyJet, missile,
+    playerJet, enemyJet, missile, explosion,
     frontTrees, middleCity, middleCityShadow, middleBackground, middleBackgroundShadow, farSun, farBackground
 ];
 

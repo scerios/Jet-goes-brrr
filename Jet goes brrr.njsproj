@@ -34,6 +34,12 @@
     <Content Include="src\app.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\app\Explosion.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\app\KeyboardInput.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\app\Player.js">
       <SubType>Code</SubType>
     </Content>
