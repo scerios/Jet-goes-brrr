@@ -24,6 +24,7 @@ export class Game {
     space;
 
     backgroundPositionX = 0;
+    isRunning = false;
 
     constructor(gameplayElements) {
         this.app = new PIXI.Application({ width: WorldDetail.getGameWidth, height: WorldDetail.getGameHeight });
@@ -389,9 +390,14 @@ export class Game {
         this.enemies.splice(this.enemies.indexOf(enemy), 1);
     }
 
-    startGame() {
+    startGame(frequency) {
         this.ticker.start();
+        this.isRunning = true;
 
+        this.startEnemySpawn(frequency);
+    }
+
+    startEnemySpawn(frequency) {
         this.spawnEnemies = setInterval(() => {
             let enemyJet = this.createEnemy();
 
@@ -399,10 +405,13 @@ export class Game {
 
             this.enemies.push(enemyJet);
             this.app.stage.addChild(enemyJet);
-        }, 2000);
+        }, parseInt(frequency));
     }
 
     stopGame() {
         this.ticker.stop();
+        this.isRunning = false;
+
+        clearInterval(this.spawnEnemies);
     }
 }

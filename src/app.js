@@ -30,7 +30,7 @@ $(document).ready(() => {
     gameContainer.fadeOut();
 });
 
-gameButtons.on('click', () => {
+gameButtons.on('click', function() {
     splashScreen.fadeOut();
     menuContainer.fadeOut();
 
@@ -40,6 +40,6 @@ gameButtons.on('click', () => {
     }, 500);
 
     setTimeout(() => {
-        game.startGame();
+        game.startGame($(this).attr('data-enemy-spawn-frequency'));
     }, 1500);
 });
