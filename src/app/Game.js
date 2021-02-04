@@ -22,9 +22,11 @@ export class Game {
     left;
     right;
     space;
+    pause;
 
     backgroundPositionX = 0;
     isRunning = false;
+    frequency;
 
     constructor(gameplayElements) {
         this.app = new PIXI.Application({ width: WorldDetail.getGameWidth, height: WorldDetail.getGameHeight });
@@ -47,11 +49,12 @@ export class Game {
     }
 
     initKeyCapture() {
-        this.up = this.keyboard("ArrowUp");
-        this.down = this.keyboard("ArrowDown");
-        this.left = this.keyboard("ArrowLeft");
-        this.right = this.keyboard("ArrowRight");
-        this.space = this.keyboard(" ");
+        this.up = this.keyboard('ArrowUp');
+        this.down = this.keyboard('ArrowDown');
+        this.left = this.keyboard('ArrowLeft');
+        this.right = this.keyboard('ArrowRight');
+        this.space = this.keyboard(' ');
+        this.pause = this.keyboard('p');
     }
 
     keyboard(value) {
@@ -84,15 +87,15 @@ export class Game {
         const upListener = key.upHandler.bind(key);
 
         window.addEventListener(
-            "keydown", downListener, false
+            'keydown', downListener, false
         );
         window.addEventListener(
-            "keyup", upListener, false
+            'keyup', upListener, false
         );
 
         key.unsubscribe = () => {
-            window.removeEventListener("keydown", downListener);
-            window.removeEventListener("keyup", upListener);
+            window.removeEventListener('keydown', downListener);
+            window.removeEventListener('keyup', upListener);
         };
 
         return key;
@@ -176,6 +179,14 @@ export class Game {
 
             this.missiles.push(missile);
             this.app.stage.addChild(missile);
+        };
+
+        this.pause.press = () => {
+            if (this.isRunning) {
+                this.pauseGame();
+            } else {
+                this.continueGame();
+            }
         };
     }
 
@@ -391,13 +402,11 @@ export class Game {
     }
 
     startGame(frequency) {
-        this.ticker.start();
-        this.isRunning = true;
-
-        this.startEnemySpawn(frequency);
+        this.frequency = frequency;
+        this.continueGame();
     }
 
-    startEnemySpawn(frequency) {
+    startEnemySpawn() {
         this.spawnEnemies = setInterval(() => {
             let enemyJet = this.createEnemy();
 
@@ -405,12 +414,25 @@ export class Game {
 
             this.enemies.push(enemyJet);
             this.app.stage.addChild(enemyJet);
-        }, parseInt(frequency));
+        }, parseInt(this.frequency));
+    }
+
+    pauseGame() {
+        this.ticker.stop();
+        this.isRunning = false;
+
+        clearInterval(this.spawnEnemies);
+    }
+
+    continueGame() {
+        this.ticker.start();
+        this.isRunning = true;
+
+        this.startEnemySpawn(this.frequency);
     }
 
     stopGame() {
-        this.ticker.stop();
-        this.isRunning = false;
+        this.pauseGame();
 
         clearInterval(this.spawnEnemies);
     }
