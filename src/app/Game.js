@@ -4,14 +4,15 @@ import { GameElement } from './GameElement.js';
 import { Player } from './Player.js';
 import { Explosion } from './Explosion.js';
 import { TextHandler } from './TextHandler.js';
+import { CollisionDetector } from './CollisionDetector.js';
 
 export class Game {
     app;
     resources;
     ticker;
-    sprites;
     tiles;
 
+    playerJet;
     explosionTextures = []
     enemies = [];
     missiles = [];
@@ -31,7 +32,6 @@ export class Game {
 
     constructor(gameplayElements) {
         this.app = new PIXI.Application({ width: WorldDetail.getGameWidth, height: WorldDetail.getGameHeight });
-        this.sprites = {};
         this.tiles = {};
 
         this.setup(gameplayElements);
@@ -104,79 +104,79 @@ export class Game {
 
     keyboardCapture() {
         this.up.press = () => {
-            this.sprites.playerJet.checkForHorizontalMovement();
+            this.playerJet.checkForHorizontalMovement();
 
             this.left.release = () => {
-                this.sprites.playerJet.leftArrowKeyReleased();
+                this.playerJet.leftArrowKeyReleased();
             };
 
             this.right.release = () => {
-                this.sprites.playerJet.rightArrowKeyReleased();
+                this.playerJet.rightArrowKeyReleased();
             };
 
-            this.sprites.playerJet.moveUp();
+            this.playerJet.moveUp();
         };
 
         this.up.release = () => {
-            this.sprites.playerJet.upArrowKeyReleased();
+            this.playerJet.upArrowKeyReleased();
         };
 
         this.down.press = () => {
-            this.sprites.playerJet.checkForHorizontalMovement();
+            this.playerJet.checkForHorizontalMovement();
 
             this.left.release = () => {
-                this.sprites.playerJet.leftArrowKeyReleased();
+                this.playerJet.leftArrowKeyReleased();
             };
 
             this.right.release = () => {
-                this.sprites.playerJet.rightArrowKeyReleased();
+                this.playerJet.rightArrowKeyReleased();
             };
 
-            this.sprites.playerJet.moveDown();
+            this.playerJet.moveDown();
         };
 
         this.down.release = () => {
-            this.sprites.playerJet.downArrowKeyReleased();
+            this.playerJet.downArrowKeyReleased();
         };
 
         this.left.press = () => {
-            this.sprites.playerJet.checkForVerticalMovement();
+            this.playerJet.checkForVerticalMovement();
 
             this.up.release = () => {
-                this.sprites.playerJet.upArrowKeyReleased();
+                this.playerJet.upArrowKeyReleased();
             };
 
             this.down.release = () => {
-                this.sprites.playerJet.downArrowKeyReleased();
+                this.playerJet.downArrowKeyReleased();
             };
 
-            this.sprites.playerJet.moveLeft();
+            this.playerJet.moveLeft();
         };
 
         this.left.release = () => {
-            this.sprites.playerJet.leftArrowKeyReleased();
+            this.playerJet.leftArrowKeyReleased();
         };
 
         this.right.press = () => {
-            this.sprites.playerJet.checkForVerticalMovement();
+            this.playerJet.checkForVerticalMovement();
 
             this.up.release = () => {
-                this.sprites.playerJet.upArrowKeyReleased();
+                this.playerJet.upArrowKeyReleased();
             };
 
             this.down.release = () => {
-                this.sprites.playerJet.downArrowKeyReleased();
+                this.playerJet.downArrowKeyReleased();
             };
 
-            this.sprites.playerJet.moveRight();
+            this.playerJet.moveRight();
         };
 
         this.right.release = () => {
-            this.sprites.playerJet.rightArrowKeyReleased();
+            this.playerJet.rightArrowKeyReleased();
         };
 
         this.space.press = () => {
-            let missile = this.sprites.playerJet.shootMissile(this.resources.missile.texture);
+            let missile = this.playerJet.shootMissile(this.resources.missile.texture);
 
             this.missiles.push(missile);
             this.app.stage.addChild(missile);
@@ -215,7 +215,7 @@ export class Game {
             this.app.stage.addChild(this.tiles.middleCityShadow);
             this.app.stage.addChild(this.tiles.middleCity);
             this.app.stage.addChild(this.tiles.frontTrees);
-            this.app.stage.addChild(this.sprites.playerJet);
+            this.app.stage.addChild(this.playerJet);
         });
     }
 
@@ -236,7 +236,7 @@ export class Game {
             this.tiles.middleCity = this.createBackgroundTile(resources.middleCity.texture);
             this.tiles.frontTrees = this.createBackgroundTile(resources.frontTrees.texture);
 
-            this.sprites.playerJet = this.createPlayer();
+            this.playerJet = this.createPlayer();
         });
     }
 
@@ -295,7 +295,7 @@ export class Game {
         this.ticker.add(() => {
             this.scrollBackground();
 
-            this.sprites.playerJet.limitMovement();
+            this.playerJet.limitMovement();
 
             this.moveEnemies();
 
@@ -314,7 +314,7 @@ export class Game {
                     continue;
                 }
 
-                if (this.checkForCollision(this.sprites.playerJet, enemy)) {
+                if (CollisionDetector.isCollisionDetected(this.playerJet, enemy)) {
                     this.explodeEnemy(enemy);
                     this.explodePlayer();
                     clearInterval(this.spawnEnemies);
@@ -340,7 +340,7 @@ export class Game {
 
                 if (this.enemies.length > 0) {
                     for (let enemy of this.enemies) {
-                        if (this.checkForCollision(missile, enemy)) {
+                        if (CollisionDetector.isCollisionDetected(missile, enemy)) {
                             this.explodeEnemy(enemy);
                             this.removeMissile(missile);
 
@@ -352,28 +352,6 @@ export class Game {
         }
     }
 
-    checkForCollision(elementA, elementB) {
-        let isHit = false;
-
-        if (elementA != undefined && elementB != undefined) {
-
-            if (elementA.x + elementA.width >= elementB.x && elementA.x <= elementB.x + elementB.width) {
-
-                if (elementA.y == elementB.y) {
-                    isHit = true;
-
-                } else if (elementA.y < elementB.y && elementA.y + elementA.height >= elementB.y) {
-                    isHit = true;
-
-                } else if (elementB.y < elementA.y && elementB.y + elementB.height >= elementA.y) {
-                    isHit = true;
-                }
-            }
-        }
-
-        return isHit;
-    };
-
     explodeEnemy(enemy) {
         let enemyExplosion = new Explosion(this.explosionTextures, enemy.x, enemy.y);
         this.app.stage.addChild(enemyExplosion);
@@ -384,12 +362,12 @@ export class Game {
     }
 
     explodePlayer() {
-        let playerExplosion = new Explosion(this.explosionTextures, this.sprites.playerJet.x, this.sprites.playerJet.y);
+        let playerExplosion = new Explosion(this.explosionTextures, this.playerJet.x, this.playerJet.y);
         this.app.stage.addChild(playerExplosion);
 
         playerExplosion.play();
 
-        this.app.stage.removeChild(this.sprites.playerJet);
+        this.app.stage.removeChild(this.playerJet);
     }
 
     removeMissile(missile) {
