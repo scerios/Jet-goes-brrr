@@ -3,6 +3,7 @@ import { WorldDetail } from './WorldDetail.js';
 import { GameElement } from './GameElement.js';
 import { Player } from './Player.js';
 import { Explosion } from './Explosion.js';
+import { TextHandler } from './TextHandler.js';
 
 export class Game {
     app;
@@ -425,10 +426,28 @@ export class Game {
     }
 
     continueGame() {
-        this.ticker.start();
-        this.isRunning = true;
+        let texts = TextHandler.getStartingTexts;
+        let indexer = 0;
 
-        this.startEnemySpawn(this.frequency);
+        let texter = setInterval(() => {
+            if (indexer == 0) {
+                this.app.stage.addChild(texts[indexer]);
+            } else if (indexer < 2) {
+                this.app.stage.removeChild(texts[indexer - 1]);
+                this.app.stage.addChild(texts[indexer]);
+            } else if (indexer == 2) {
+                this.app.stage.addChild(texts[indexer]);
+                this.app.stage.removeChild(texts[indexer - 1]);
+                this.ticker.start();
+                this.isRunning = true;
+                this.startEnemySpawn(this.frequency);
+            } else {
+                this.app.stage.removeChild(texts[indexer - 1]);
+                clearInterval(texter);
+            }
+
+            indexer++;
+        }, 1000);
     }
 
     stopGame() {

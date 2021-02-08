@@ -46,6 +46,12 @@
     <Content Include="src\app\Game.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\app\StyledText.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\app\TextHandler.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\app\WorldDetail.js">
       <SubType>Code</SubType>
     </Content>

@@ -28,6 +28,10 @@ const gameplayElements = [
 $(document).ready(() => {
     game = new Game(gameplayElements);
     gameContainer.fadeOut();
+
+    setTimeout(() => {
+        gameContainer.append(game.app.view);
+    }, 500);
 });
 
 gameButtons.on('click', function() {
@@ -35,11 +39,7 @@ gameButtons.on('click', function() {
     menuContainer.fadeOut();
 
     setTimeout(() => {
-        gameContainer.append(game.app.view);
         gameContainer.fadeIn();
-    }, 500);
-
-    setTimeout(() => {
         game.startGame($(this).attr('data-enemy-spawn-frequency'));
-    }, 1500);
+    }, 500);
 });
