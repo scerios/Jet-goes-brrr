@@ -1,5 +1,5 @@
 export class CollisionDetector {
-    static isCollisionDetected(elementA, elementB) {
+    static isDetected(elementA, elementB) {
         let isHit = false;
 
         if (elementA != undefined && elementB != undefined) {

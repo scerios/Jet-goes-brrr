@@ -11,6 +11,7 @@ export class Game {
     resources;
     ticker;
     tiles;
+    TextHandler;
 
     playerJet;
     explosionTextures = []
@@ -27,6 +28,7 @@ export class Game {
     pause;
 
     backgroundPositionX = 0;
+    killedEnemies = 0;
     isRunning = false;
     frequency;
 
@@ -38,6 +40,7 @@ export class Game {
     }
 
     setup(gameplayElements) {
+        this.TextHandler = new TextHandler();
         this.initKeyCapture();
         this.keyboardCapture();
 
@@ -314,7 +317,7 @@ export class Game {
                     continue;
                 }
 
-                if (CollisionDetector.isCollisionDetected(this.playerJet, enemy)) {
+                if (CollisionDetector.isDetected(this.playerJet, enemy)) {
                     this.explodeEnemy(enemy);
                     this.explodePlayer();
                     clearInterval(this.spawnEnemies);
@@ -340,7 +343,9 @@ export class Game {
 
                 if (this.enemies.length > 0) {
                     for (let enemy of this.enemies) {
-                        if (CollisionDetector.isCollisionDetected(missile, enemy)) {
+                        if (CollisionDetector.isDetected(missile, enemy)) {
+                            this.killedEnemies++;
+                            this.TextHandler.setPointsValue(this.killedEnemies);
                             this.explodeEnemy(enemy);
                             this.removeMissile(missile);
 
@@ -404,7 +409,8 @@ export class Game {
     }
 
     continueGame() {
-        let texts = TextHandler.getStartingTexts;
+        let texts = this.TextHandler.getStartingTexts();
+        this.TextHandler.setPointsTexts();
         let indexer = 0;
 
         let texter = setInterval(() => {
@@ -421,6 +427,8 @@ export class Game {
                 this.startEnemySpawn(this.frequency);
             } else {
                 this.app.stage.removeChild(texts[indexer - 1]);
+                this.app.stage.addChild(this.TextHandler.getPointsText());
+                this.app.stage.addChild(this.TextHandler.getPointsValue());
                 clearInterval(texter);
             }
 
